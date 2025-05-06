@@ -29,7 +29,7 @@ const Sidebar = () => {
           <Link
             to={item.path}
             className={`flex items-center p-5 rounded-lg transition duration-300 ease-in-out hover:scale-[1.03] ${
-              currentPath === item.path
+              currentPath.startsWith(item.path)
                 ? 'bg-active text-text'
                 : 'hover:bg-hover hover:text-text'
             }`}

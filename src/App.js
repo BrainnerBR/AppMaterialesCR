@@ -14,6 +14,8 @@ import Facturacion from './components/facturacion/Facturacion';
 import Proyectos from './components/proyectos/Proyectos';
 import Inventario from './components/inventario/Inventario';
 import Visitas from './components/visitas/Visitas';
+import TodasLasFacturas from './components/facturacion/TodasLasFacturas';
+import NotFound from './routes/NotFound';
 
 function App() {
   return (
@@ -37,12 +39,14 @@ function App() {
             path="/facturacion"
             element={
               <ProtectedRoute>
-                <PrivateLayout>
-                  <Facturacion />
-                </PrivateLayout>
+                <PrivateLayout />
               </ProtectedRoute>
             }
-          />
+          >
+            <Route index element={<Facturacion />} />
+            <Route path="todas" element={<TodasLasFacturas/>} />
+          </Route>
+
           <Route
             path="/proyectos"
             element={
@@ -73,6 +77,9 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+            <Route path='*' element={<NotFound/>}/>
+
         </Routes>
       </Router>
     </AuthProvider>

@@ -19,7 +19,7 @@ const firebaseConfig = {
   const fireDb = ref(database, 'productos');
 
   export const auth = getAuth(app);
-  export const db = getFirestore(app);
+  export const db = getDatabase(app);
   
   export default fireDb;
   

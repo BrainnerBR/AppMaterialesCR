@@ -58,7 +58,7 @@ export default function Inventario() {
 
   const cargarDatos = async () => {
     const db = getDatabase();
-    const sucursalRef = ref(db, "productos/" + sucursal); // Ruta en la base de datos
+    const sucursalRef = ref(db, "morteros/" + sucursal); // Ruta en la base de datos
     const snapshot = await get(sucursalRef); // Obtener datos de la sucursal
     if (snapshot.exists()) {
       setCantidades(snapshot.val());
@@ -81,7 +81,7 @@ export default function Inventario() {
   const guardarEdicion = async (producto) => {
     try {
       const db = getDatabase();
-      const sucursalRef = ref(db, "productos/" + sucursal);
+      const sucursalRef = ref(db, "morteros/" + sucursal);
       const nuevosDatos = { ...cantidades, [producto]: nuevaCantidad[sucursal] };
       await set(sucursalRef, nuevosDatos);
       await cargarDatos();
