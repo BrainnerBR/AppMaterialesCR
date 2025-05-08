@@ -6,15 +6,20 @@ module.exports = {
   theme: {
     extend: {
       colors:{
-        primary: '#3600a5',
-        secondary: '#d8ceff',
-        hover: "#bca7ff",
-        active: "#bca7ff",
-        text: "#31008d",
+        primary: '#00dde5',
+        secondary: '#105b69',
+        hover: "#00b0c0",
+        active: "#038c9b",
+        text: "#00fbff",
         border: "#7037ff"
       }
     },
   },
   plugins: [],
+  variants: {
+    extend: {
+      display:['print'],
+    },
+  },
 }
 

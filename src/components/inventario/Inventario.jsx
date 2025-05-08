@@ -104,8 +104,8 @@ export default function Inventario() {
             key={key}
             className={`px-4 py-2 rounded-lg transition ${
               sucursal === key
-                ? "bg-primary text-white"
-                : "bg-gray-200 text-primary hover:bg-primary hover:text-white"
+                ? "bg-active text-text"
+                : "bg-secondary text-text hover:bg-hover hover:text-white"
             }`}
             onClick={() => setSucursal(key)}
           >
@@ -115,8 +115,8 @@ export default function Inventario() {
       </div>
 
       {/* Tabla */}
-      <table className="w-full text-lg text-left text-text bg-white rounded-2xl shadow-lg overflow-hidden">
-        <thead className="text-xs uppercase bg-primary text-white">
+      <table className="w-full text-lg text-left text-black bg-white rounded-2xl shadow-lg overflow-hidden">
+        <thead className="text-md uppercase bg-gray-100 text-black">
           <tr>
             <th className="px-6 py-4">PRODUCTO</th>
             <th className="px-6 py-4">CANTIDAD</th>
@@ -127,16 +127,16 @@ export default function Inventario() {
         <tbody ref={editarRef}>
           {productos.map((producto, i) => {
             const cantidad = cantidades?.[producto] ?? 0;
-            const estado = cantidad <= 10 ? "Bajo" : cantidad <= 30 ? "Medio" : "Alto";
+            const estado = cantidad === 0 ? "No Disponible" : cantidad <= 50 ? "Bajo" : cantidad <= 100 ? "Medio" : "Alto";
 
             return (
               <tr
                 key={i}
                 className={`${
-                  i % 2 === 0 ? "bg-secondary" : "bg-white"
+                  i % 2 === 0 ? "bg-gray-50" : "bg-gray-100"
                 } border-b border-gray-300`}
               >
-                <td className="px-6 py-4 font-medium text-text whitespace-nowrap">
+                <td className="px-6 py-4 font-medium text-black whitespace-nowrap">
                   {producto}
                 </td>
                 <td className="px-6 py-4">
@@ -170,7 +170,7 @@ export default function Inventario() {
                     <a
                       href="#"
                       onClick={() => manejarEdicion(producto)}
-                      className="inline-flex items-center justify-center gap-2 text-primary hover:underline hover:text-hover transition"
+                      className="inline-flex items-center justify-center gap-2 text-secondary hover:underline hover:text-hover transition"
                     >
                       Editar
                       <FaPen className="w-4 h-4" />
