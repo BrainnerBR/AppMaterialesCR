@@ -37,7 +37,7 @@ const Dashboard = ({
         {/* Historial de Facturas (arriba izquierda) */}
         <Link to={'/facturacion/todas'}>
         <div className="bg-gray-50 shadow-md rounded-lg p-6 col-span-1 cursor-pointer hover:bg-gray-100">
-          <h3 className="text-lg font-bold mb-4 text-blue-700">
+          <h3 className="text-lg font-bold mb-4 text-primary">
             Últimas Facturas
           </h3>
 

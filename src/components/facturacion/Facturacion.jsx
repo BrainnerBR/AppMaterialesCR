@@ -21,36 +21,39 @@ const Facturacion = () => {
   const [productos, setProductos] = useState([]);
 
   const agregarProducto = () => {
-    if(!productoTipo || !productoDetalle || !productoCantidad) {
+    if (!productoTipo || !productoDetalle || !productoCantidad) {
       toast.error("Complete todos los campos del producto");
       return;
     }
-    setProductos([
-      ...productos,
-      {
-        tipo: productoTipo,
-        detalle: productoDetalle,
-        cantidad: parseInt(productoCantidad, 10),
-      },
-    ]);
+  
+    const nuevoProducto = {
+      tipo: productoTipo,
+      detalle: productoDetalle,
+      cantidad: productoCantidad,
+    };
+  
+    setProductos([...productos, nuevoProducto]);
+  
+    // Limpiar inputs del producto
     setProductoTipo("");
     setProductoDetalle("");
     setProductoCantidad("");
   };
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     if (productos.length === 0) {
       toast.error("Debe agregar al menos un producto");
       return;
     }
-
+  
     const numeroRef = ref(db, "ultimoNumeroFactura");
     const snapshot = await get(numeroRef);
     let numeroActual = snapshot.val() || "011111";
     const siguienteNumero = String(parseInt(numeroActual, 10) + 1).padStart(6, "0");
-
+  
     const nuevaFactura = {
       numeroFactura: numeroActual,
       cliente,
@@ -58,12 +61,12 @@ const Facturacion = () => {
       productos,
       fecha: new Date().toLocaleString(),
     };
-
+  
     try {
       await push(ref(db, "facturas"), nuevaFactura);
       await set(numeroRef, siguienteNumero);
       toast.success("Factura guardada");
-
+  
       // Limpiar formulario
       setCliente("");
       setRecibidoPor("");
@@ -134,6 +137,7 @@ const Facturacion = () => {
                     <option key={adoquin} value={adoquin}>{adoquin}</option>
                   ))}
               </select>
+              
             </div>
           )}
 
@@ -149,16 +153,17 @@ const Facturacion = () => {
               />
             </div>
           )}
+          <div>
+          <button
+  type="button"
+  onClick={agregarProducto}
+  className="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+>
+  Agregar Producto
+</button>
+          </div>
+          
 
-          {productoTipo && (
-            <button
-              type="button"
-              onClick={agregarProducto}
-              className="bg-blue-500 text-white px-3 py-1 rounded"
-            >
-              Agregar a factura
-            </button>
-          )}
 
           {/* Lista de productos añadidos */}
           {productos.length > 0 && (
@@ -176,7 +181,7 @@ const Facturacion = () => {
 
           {/* Recibido por */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">Recibido por</label>
+            <label className="block text-sm font-medium text-gray-700">Realizado por</label>
             <input
               type="text"
               value={recibidoPor}
@@ -188,7 +193,7 @@ const Facturacion = () => {
 
           <button
             type="submit"
-            className="bg-primary text-black py-2 px-4 rounded hover:bg-hover hover:text-text transition-all"
+            className="bg-primary text-text py-2 px-4 rounded hover:bg-hover hover:text-text transition-all"
           >
             Guardar Factura
           </button>

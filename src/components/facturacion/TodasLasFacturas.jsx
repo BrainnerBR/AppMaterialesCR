@@ -232,13 +232,13 @@ const TodasLasFacturas = () => {
                   </div>
 
                   {/* Recibido por */}
-                  <div className="text-sm mt-2">
+                  <div className="text-sm mt-2 mb-2">
                     <strong>RECIBIDO POR:</strong> {factura.recibidoPor}
                   </div>
                 </div>
 
                 {/* Acciones */}
-                <div className="absolute bottom-2 right-3 flex gap-3 print:hidden">
+                <div className="absolute bottom-1 right-3 flex gap-3 print:hidden">
 
                     <FacturaImprimible factura={factura}/>
                   <button

@@ -8,7 +8,7 @@ const FacturacionNavbar = () => {
     const getLinkClass = (path) => {
         const isActive = location.pathname === `/facturacion${path}`;
         return `rounded text-lg px-4 py-2 transition ${
-          isActive ? 'bg-primary text-black' : 'bg-active text-text hover:bg-hover hover:text-text'
+          isActive ? 'bg-primary text-text' : 'bg-active text-text hover:bg-hover hover:text-text'
         }`;
       };
 

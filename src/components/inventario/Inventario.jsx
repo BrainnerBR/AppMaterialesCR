@@ -162,7 +162,7 @@ export default function Inventario() {
                   {productoEditando === producto ? (
                     <button
                       onClick={() => guardarEdicion(producto)}
-                      className="inline-flex items-center justify-center gap-2 text-primary hover:underline hover:text-hover transition"
+                      className="inline-flex items-center justify-center gap-2 text-primary hover:underline hover:text-primary transition"
                     >
                       Guardar
                     </button>
@@ -170,7 +170,7 @@ export default function Inventario() {
                     <a
                       href="#"
                       onClick={() => manejarEdicion(producto)}
-                      className="inline-flex items-center justify-center gap-2 text-secondary hover:underline hover:text-hover transition"
+                      className="inline-flex items-center justify-center gap-2 text-secondary hover:underline hover:text-primary transition"
                     >
                       Editar
                       <FaPen className="w-4 h-4" />
