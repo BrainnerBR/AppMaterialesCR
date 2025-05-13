@@ -3,6 +3,7 @@ import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/
 import { auth } from "../../firebaseConfig";
 import { useNavigate } from "react-router-dom";
 import { set } from "firebase/database";
+import toast, { Toaster } from "react-hot-toast";
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -17,11 +18,11 @@ const Register = () => {
 
 
     if(password !== repeatPassword) {
-      alert("Las contraseñas no coinciden")
+      toast.error("Las contraseñas no coinciden")
       return;
     }
     if (!passwordRegex.test(password)) {
-      alert("La contraseña debe tener al menos 8 caracteres, incluyendo una mayúscula, una minúscula, un número y un carácter especial.");
+      toast.error("La contraseña debe tener al menos 8 caracteres, incluyendo una mayúscula, una minúscula, un número y un carácter especial.");
       return;
     }
     try {
@@ -30,10 +31,10 @@ const Register = () => {
   
       await sendEmailVerification(user);
   
-      alert("Registro exitoso. Revisa tu correo electrónico para verificar tu cuenta.");
+      toast("Registro exitoso. Revisa tu correo electrónico para verificar tu cuenta.");
       navigate("/login");
     } catch (error) {
-      alert("Error al registrar usuario: " + error.message);
+      toast.error("Error al registrar usuario: " + error.message);
     }
   };
 
@@ -86,6 +87,7 @@ const Register = () => {
           ¿Ya tienes una cuenta? <a href="/login" className="text-primary hover:underline">Inicia sesión</a>
         </p>
       </div>
+        <Toaster position="top-center" reverseOrder={false} />
     </div>
   );
 }

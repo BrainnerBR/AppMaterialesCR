@@ -2,22 +2,26 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {auth} from '../../firebaseConfig'
+import toast, { Toaster } from 'react-hot-toast';
 
 const Login = ({ setIsAuthenticated }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    try{
-      await signInWithEmailAndPassword(auth, email, password);
-      navigate('/dashboard');
-    }catch(error) {
-
-      alert("Error de Inicio de sesion")
-    }
+const handleLogin = async (e) => {
+  e.preventDefault();
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    navigate('/dashboard');
+  } catch (error) {
+  if (error.code === 'auth/too-many-requests') {
+    toast.error('Demasiados intentos fallidos. Inténtalo más tarde o restablece tu contraseña.');
+    } else
+    console.log(error)
+    toast.error('Error de inicio de sesión');
   }
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
@@ -57,6 +61,7 @@ const Login = ({ setIsAuthenticated }) => {
           ¿No tienes una cuenta? <a href="/register" className="text-primary hover:underline">Regístrate</a>
         </p>
       </div>
+        <Toaster position="top-center" reverseOrder={false} />
     </div>
   );
 };

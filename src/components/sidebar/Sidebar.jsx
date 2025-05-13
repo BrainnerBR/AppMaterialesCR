@@ -9,7 +9,7 @@ const Sidebar = () => {
   const currentPath = location.pathname;
 
   const navItems = [
-    {path: '/facturacion', label: 'Facturación', icon: <FaFileInvoice className='w-5 h-5 text-text' />},
+    {path: '/facturacion', label: 'Guías de Entrega', icon: <FaFileInvoice className='w-5 h-5 text-text' />},
     { path: '/proyectos', label: 'Proyectos', icon: <FaProjectDiagram className="w-5 h-5 text-text" /> },
     { path: '/inventario', label: 'Inventario', icon: <FaBoxOpen className="w-5 h-5 text-text" /> },
     { path: '/visitas', label: 'Visitas', icon: <FaMapMarkerAlt className="w-5 h-5 text-text" /> },
@@ -28,7 +28,7 @@ const Sidebar = () => {
         <li key={item.path}>
           <Link
             to={item.path}
-            className={`flex items-center p-5 rounded-lg transition duration-300 ease-in-out hover:scale-[1.03] ${
+            className={`flex items-center p-5 rounded-lg transition duration-300 ease-in-out ${
               currentPath.startsWith(item.path)
                 ? 'bg-active text-text'
                 : 'hover:bg-hover hover:text-text'

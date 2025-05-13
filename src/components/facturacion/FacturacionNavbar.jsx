@@ -8,7 +8,7 @@ const FacturacionNavbar = () => {
     const getLinkClass = (path) => {
         const isActive = location.pathname === `/facturacion${path}`;
         return `rounded text-lg px-4 py-2 transition ${
-          isActive ? 'bg-primary text-text' : 'bg-active text-text hover:bg-hover hover:text-text'
+          isActive ? 'bg-primary hover:bg-primary/70 text-text' : 'bg-active text-text hover:bg-hover hover:text-text'
         }`;
       };
 
@@ -18,13 +18,13 @@ const FacturacionNavbar = () => {
     <li className='justify-center'>
       <Link to="/facturacion" className={getLinkClass('')}>
         <TbPlus className='inline-block h-full mx-auto mr-2'/>
-          Nueva factura
+          Nueva Guía
       </Link>
     </li>
     <li>
       <Link to="/facturacion/todas" className={getLinkClass('/todas')}>
       <TbListDetails className='inline-block h-full mx-auto mr-2' />
-         Ver todas las facturas
+         Ver todas las Guías
       </Link>
     </li>
   </ul>

@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 import { db } from "../../firebaseConfig";
 import { TbTrash } from "react-icons/tb";
 import toast from "react-hot-toast";
+import { prodErrorMap } from "firebase/auth";
 
 const UltimasFacturas = () => {
   const [numeroFactura, setNumeroFactura] = useState("");
@@ -74,46 +75,18 @@ const UltimasFacturas = () => {
     });
   }, []);
 
-  const eliminarFactura = async (id) => {
-    try {
-      const result = await Swal.fire({
-        title: "¿Confirmar eliminar factura?",
-        text: "¡No podrás revertir los cambios!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Sí, eliminar",
-        cancelButtonText: "Cancelar",
-      });
-
-      if (result.isConfirmed) {
-        await remove(ref(db, `facturas/${id}`));
-        setHistorial((prev) => prev.filter((factura) => factura.id !== id));
-
-        await Swal.fire({
-          title: "Eliminada",
-          text: "Factura eliminada con éxito.",
-          icon: "success",
-        });
-      }
-    } catch (error) {
-      console.error("Error eliminando la factura", error);
-      toast.error("Error al eliminar");
-    }
-  };
 
   return (
-    <div className="w-1/2 bg-white shadow-md rounded-lg p-6">
+    <div className="bg-white h-full shadow-md rounded-lg p-6">
       {/* Historial */}
       <div>
         <h3 className="text-lg font-bold mb-4 text-primary">
-          Últimas Facturas
+          Últimas Guías
         </h3>
 
         {historial.length === 0 ? (
           <div className="text-center text-gray-500 text-sm">
-            No hay Facturas
+            No hay Guías
           </div>
         ) : (
           <>
@@ -123,35 +96,28 @@ const UltimasFacturas = () => {
                   key={factura.id}
                   className="p-3 border-b rounded hover:bg-gray-100 transition flex justify-between items-center"
                 >
-                  {/* Parte izquierda: datos de la factura */}
                   <div
                     onClick={() => setFacturaSeleccionada(factura)}
                     className="flex-1 cursor-pointer"
                   >
                     <strong>Cliente:</strong> {factura.cliente} <br />
-                    <strong>Bloques:</strong> {factura.cantidadBloques || "-"} (
-                    {factura.tipoBloque}) <br />
-                    <strong>Adoquines:</strong>{" "}
-                    {factura.cantidadAdoquines || "-"} ({factura.tipoAdoquin}){" "}
-                    <br />
-                    <strong>Recibido por:</strong> {factura.recibidoPor || "-"}{" "}
+                    {factura.productos && factura.productos.length > 0 && (
+                      <>
+                        {factura.productos.map((producto, index) => (
+                          <div key={index}>
+                            <strong>{producto.tipo}:</strong> {producto.detalle}{" "}
+                            - {producto.cantidad}
+                          </div>
+                        ))}
+                      </>
+                    )}
+                    <strong>Realizado por:</strong> {factura.recibidoPor || "-"}{" "}
                     <br />
                     <small className="text-gray-500">
                       {factura.fecha || "NaN"}
                     </small>
                   </div>
 
-                  {/* Parte derecha: ícono de basurero */}
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation(); // evita abrir la factura al hacer click en el ícono
-                      eliminarFactura(factura.id);
-                    }}
-                    className="ml-4 text-red-500 hover:text-red-700"
-                    title="Eliminar factura"
-                  >
-                    <TbTrash size={28} />
-                  </button>
                 </li>
               ))}
             </ul>
@@ -217,61 +183,20 @@ const UltimasFacturas = () => {
             {/* Tabla */}
             <div className="border border-blue-700 mb-2">
               <div className="grid grid-cols-2 text-xs font-bold bg-blue-100 border-b border-blue-700 text-center">
-                <div className="py-1">BLOQUES</div>
+                <div className="py-1">PRODUCTO</div>
                 <div className="py-1">CANTIDAD</div>
               </div>
-              {/* Tipos de bloque */}
-              <div className="grid grid-cols-2 text-xs text-center border-b border-blue-200">
-                <div className="py-1">12 x 20 x 40</div>
-                <div className="py-1">
-                  {facturaSeleccionada.tipoBloque === "Bloque 12x20x40"
-                    ? facturaSeleccionada.cantidadBloques
-                    : ""}
+              {facturaSeleccionada.productos?.map((prod, index) => (
+                <div key={index} className="grid grid-cols-2 text-xs text-center border-b border-blue-200">
+                    <div className="py-1">{prod.detalle}</div>
+                    <div className="py-1">{prod.cantidad}</div>
                 </div>
-              </div>
-              <div className="grid grid-cols-2 text-xs text-center border-b border-blue-200">
-                <div className="py-1">15 x 20 x 40</div>
-                <div className="py-1">
-                  {facturaSeleccionada.tipoBloque === "Bloque 15x20x40"
-                    ? facturaSeleccionada.cantidadBloques
-                    : ""}
-                </div>
-              </div>
-              <div className="grid grid-cols-2 text-xs text-center border-b border-blue-700">
-                <div className="py-1">20 x 20 x 40</div>
-                <div className="py-1">
-                  {facturaSeleccionada.tipoBloque === "Bloque 20x20x40"
-                    ? facturaSeleccionada.cantidadBloques
-                    : ""}
-                </div>
-              </div>
-
-              {/* Adoquines */}
-              <div className="grid grid-cols-2 text-xs font-bold bg-blue-100 border-b border-blue-700 text-center">
-                <div className="py-1">ADOQUINES</div>
-                <div className="py-1">CANTIDAD</div>
-              </div>
-              <div className="grid grid-cols-2 text-xs text-center border-b border-blue-200">
-                <div className="py-1">8 x 10 x 20</div>
-                <div className="py-1">
-                  {facturaSeleccionada.tipoAdoquin === "8x10x20"
-                    ? facturaSeleccionada.cantidadAdoquines
-                    : ""}
-                </div>
-              </div>
-              <div className="grid grid-cols-2 text-xs text-center">
-                <div className="py-1">6 x 10 x 20</div>
-                <div className="py-1">
-                  {facturaSeleccionada.tipoAdoquin === "6x10x20"
-                    ? facturaSeleccionada.cantidadAdoquines
-                    : ""}
-                </div>
-              </div>
+              ))}
             </div>
 
             {/* Recibido por */}
             <div className="text-sm mt-2">
-              <strong>RECIBIDO POR:</strong> {facturaSeleccionada.recibidoPor}
+              <strong>Realizado POR:</strong> {facturaSeleccionada.recibidoPor}
             </div>
           </div>
         </div>

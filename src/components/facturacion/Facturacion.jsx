@@ -7,7 +7,6 @@ import FacturacionNavbar from "./FacturacionNavbar";
 import { TbTrash } from "react-icons/tb";
 import UltimasFacturas from "./UltimasFacturas";
 
-
 const Facturacion = () => {
   const [cliente, setCliente] = useState("");
   const [tipoBloque, setTipoBloque] = useState("");
@@ -15,81 +14,66 @@ const Facturacion = () => {
   const [tipoAdoquin, setTipoAdoquin] = useState("");
   const [cantidadAdoquines, setCantidadAdoquines] = useState("");
   const [recibidoPor, setRecibidoPor] = useState("");
+  const [productos, setProductos] = useState([]);
   const [productoTipo, setProductoTipo] = useState("");
   const [productoDetalle, setProductoDetalle] = useState("");
   const [productoCantidad, setProductoCantidad] = useState("");
-  const [productos, setProductos] = useState([]);
 
-  const agregarProducto = () => {
-    if (!productoTipo || !productoDetalle || !productoCantidad) {
-      toast.error("Complete todos los campos del producto");
+  const handleSubmit = async () => {
+    if (!cliente || !recibidoPor || productos.length === 0) {
+      toast.error("Completa todos los campos y agrega al menos un producto.");
       return;
     }
-  
-    const nuevoProducto = {
-      tipo: productoTipo,
-      detalle: productoDetalle,
-      cantidad: productoCantidad,
-    };
-  
-    setProductos([...productos, nuevoProducto]);
-  
-    // Limpiar inputs del producto
-    setProductoTipo("");
-    setProductoDetalle("");
-    setProductoCantidad("");
-  };
 
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-  
-    if (productos.length === 0) {
-      toast.error("Debe agregar al menos un producto");
-      return;
-    }
-  
-    const numeroRef = ref(db, "ultimoNumeroFactura");
-    const snapshot = await get(numeroRef);
-    let numeroActual = snapshot.val() || "011111";
-    const siguienteNumero = String(parseInt(numeroActual, 10) + 1).padStart(6, "0");
-  
-    const nuevaFactura = {
-      numeroFactura: numeroActual,
-      cliente,
-      recibidoPor,
-      productos,
-      fecha: new Date().toLocaleString(),
-    };
-  
     try {
+      // Obtener el último número de factura
+      const numeroRef = ref(db, "ultimoNumeroFactura");
+      const snapshot = await get(numeroRef);
+     let numeroActual = snapshot.val() || 0; // <-- 0 para que empiece desde 1 si no existe
+
+const siguienteNumero = numeroActual + 1;
+
+      // Crear objeto de factura
+      const nuevaFactura = {
+        numeroFactura: numeroActual,
+        cliente,
+        recibidoPor,
+        fecha: new Date().toLocaleString(),
+        productos,
+      };
+
+      // Guardar en Firebase
       await push(ref(db, "facturas"), nuevaFactura);
       await set(numeroRef, siguienteNumero);
-      toast.success("Factura guardada");
-  
+
+      toast.success("Factura guardada correctamente");
+
       // Limpiar formulario
       setCliente("");
       setRecibidoPor("");
       setProductos([]);
     } catch (error) {
-      toast.error("Error al guardar");
-      console.error(error);
+      console.error("Error al guardar la factura:", error);
+      toast.error("Error al guardar la factura.");
     }
   };
 
   return (
     <div>
       <FacturacionNavbar />
-      <div className="flex p-2 gap-5">
+      <div className="flex p-2 gap-5 ">
+        {/* Formulario */}
         <form
-          onSubmit={handleSubmit}
-          className="w-1/2 bg-white shadow-md rounded-lg p-6 space-y-4"
+          onSubmit={(e) => e.preventDefault()}
+          className="w-1/3 bg-white shadow-md rounded-lg p-6 space-y-4"
         >
-          <h2 className="text-xl font-bold text-primary">Registrar Factura</h2>
+          <h2 className="text-xl font-bold text-primary">Registrar Nueva Guías</h2>
 
           {/* Cliente */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">Cliente</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Cliente
+            </label>
             <input
               type="text"
               value={cliente}
@@ -101,26 +85,31 @@ const Facturacion = () => {
 
           {/* Selección de producto */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">Agregar Producto</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Tipo de Producto
+            </label>
             <select
               value={productoTipo}
               onChange={(e) => {
                 setProductoTipo(e.target.value);
-                setProductoDetalle(""); // reset tipo específico
+                setProductoDetalle("");
+                setProductoCantidad("");
               }}
               className="w-full border rounded p-2"
             >
-              <option value="">Seleccionar tipo</option>
+              <option value="">Seleccionar</option>
               <option value="Bloque">Bloque</option>
               <option value="Adoquín">Adoquín</option>
             </select>
           </div>
 
-          {/* Detalles del producto */}
+          {/* Tipo específico de producto */}
           {productoTipo && (
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                {productoTipo === "Bloque" ? "Tipo de Bloque" : "Tipo de Adoquín"}
+                {productoTipo === "Bloque"
+                  ? "Tipo de Bloque"
+                  : "Tipo de Adoquín"}
               </label>
               <select
                 value={productoDetalle}
@@ -129,22 +118,29 @@ const Facturacion = () => {
               >
                 <option value="">Seleccionar</option>
                 {productoTipo === "Bloque" &&
-                  ["Bloque 12x20x40", "Bloque 15x20x40", "Bloque 20x20x40"].map((bloque) => (
-                    <option key={bloque} value={bloque}>{bloque}</option>
-                  ))}
+                  ["12x20x40", "15x20x40", "20x20x40"].map(
+                    (bloque) => (
+                      <option key={bloque} value={bloque}>
+                        {bloque}
+                      </option>
+                    )
+                  )}
                 {productoTipo === "Adoquín" &&
                   ["8x10x20", "6x10x20"].map((adoquin) => (
-                    <option key={adoquin} value={adoquin}>{adoquin}</option>
+                    <option key={adoquin} value={adoquin}>
+                      {adoquin}
+                    </option>
                   ))}
               </select>
-              
             </div>
           )}
 
           {/* Cantidad */}
           {productoTipo && (
             <div>
-              <label className="block text-sm font-medium text-gray-700">Cantidad</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Cantidad
+              </label>
               <input
                 type="number"
                 value={productoCantidad}
@@ -153,53 +149,98 @@ const Facturacion = () => {
               />
             </div>
           )}
+
+          {/* Realizado por */}
           <div>
-          <button
-  type="button"
-  onClick={agregarProducto}
-  className="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
->
-  Agregar Producto
-</button>
-          </div>
-          
-
-
-          {/* Lista de productos añadidos */}
-          {productos.length > 0 && (
-            <div className="border p-3 rounded bg-gray-100 mt-4">
-              <strong>Productos agregados:</strong>
-              <ul className="list-disc pl-4 mt-2">
-                {productos.map((prod, i) => (
-                  <li key={i}>
-                    {prod.tipo}: {prod.detalle} - {prod.cantidad}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          {/* Recibido por */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Realizado por</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Realizado por
+            </label>
             <input
+              required
               type="text"
               value={recibidoPor}
               onChange={(e) => setRecibidoPor(e.target.value)}
               className="w-full border rounded p-2"
-              required
             />
+          </div>
+          {/* Botón para agregar al resumen */}
+          {cliente && productoTipo && productoDetalle && productoCantidad && recibidoPor &&(
+            <button
+              onClick={() => {
+                const nuevoProducto = {
+                  tipo: productoTipo,
+                  detalle: productoDetalle,
+                  cantidad: productoCantidad,
+                };
+                setProductos((prev) => [...prev, nuevoProducto]);
+                setProductoTipo("");
+                setProductoDetalle("");
+                setProductoCantidad("");
+              }}
+              className="bg-primary text-text py-2 px-4 rounded hover:bg-hover hover:text-text transition-all"
+            >
+              Agregar Producto
+            </button>
+          )}
+        </form>
+
+        <div className="w-1/3 bg-white shadow-md rounded-lg p-6 flex flex-col">
+          <h2 className="text-xl font-bold text-primary mb-4">
+            Resumen de la Guía
+          </h2>
+
+          <div className="text-sm mb-2">
+            <strong>Cliente:</strong>{" "}
+            {cliente || <span className="text-gray-400">No ingresado</span>}
+          </div>
+
+          <div className="text-sm mb-2">
+            <strong>Fecha:</strong> {new Date().toLocaleDateString()} <br />
+          </div>
+
+          <div className="text-sm mb-2">
+            <strong>Realizado por:</strong>{" "}
+            {recibidoPor || <span className="text-gray-400">No ingresado</span>}
+          </div>
+
+          <div className="mt-3 border-t pt-3 flex-1 overflow-y-auto">
+            <h3 className="text-sm font-semibold text-primary mb-2">
+              Productos:
+            </h3>
+            {productos.length === 0 ? (
+              <p className="text-sm text-gray-500">
+                No hay productos seleccionados
+              </p>
+            ) : (
+              <ul className="space-y-2">
+                {productos.map((prod, i) => (
+                  <li
+                    key={i}
+                    className="bg-gray-100 p-2 rounded shadow-sm flex justify-between items-center text-sm"
+                  >
+                    <div>
+                      <strong>{prod.tipo}</strong>: {prod.detalle} <br />
+                      <span className="text-gray-600">
+                        Cantidad: {prod.cantidad}
+                      </span>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
 
           <button
-            type="submit"
-            className="bg-primary text-text py-2 px-4 rounded hover:bg-hover hover:text-text transition-all"
+            onClick={handleSubmit}
+            className="mt-6 bg-primary text-text py-2 px-4 rounded hover:bg-primary/70 hover:text-text transition-all"
           >
-            Guardar Factura
+            Guardar Guías
           </button>
-        </form>
+        </div>
 
-        <UltimasFacturas />
+        <div className="w-1/3">
+          <UltimasFacturas />
+        </div>
       </div>
     </div>
   );

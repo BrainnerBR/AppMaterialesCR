@@ -104,7 +104,7 @@ export default function Inventario() {
             key={key}
             className={`px-4 py-2 rounded-lg transition ${
               sucursal === key
-                ? "bg-active text-text"
+                ? "bg-primary text-text"
                 : "bg-secondary text-text hover:bg-hover hover:text-white"
             }`}
             onClick={() => setSucursal(key)}
@@ -116,7 +116,7 @@ export default function Inventario() {
 
       {/* Tabla */}
       <table className="w-full text-lg text-left text-black bg-white rounded-2xl shadow-lg overflow-hidden">
-        <thead className="text-md uppercase bg-gray-100 text-black">
+        <thead className="text-md uppercase bg-gray-100 text-primary">
           <tr>
             <th className="px-6 py-4">PRODUCTO</th>
             <th className="px-6 py-4">CANTIDAD</th>
