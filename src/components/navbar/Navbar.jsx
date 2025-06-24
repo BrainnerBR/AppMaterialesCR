@@ -21,7 +21,6 @@ const Navbar = () => {
       </div>
       <div className="flex gap-8 text-white text-xl ">
         <Link to="/dashboard">
-        <FaHome href="/dashboard" className="cursor-pointer rounded-lg transition hover:scale-[1.07] hover:text-primary" />
         </Link>
         <FaUser className="cursor-pointer transition hover:scale-[1.05] text-text hover:text-primary" />
         <FaCog className="cursor-pointer transition hover:scale-[1.05] text-text hover:text-primary" />

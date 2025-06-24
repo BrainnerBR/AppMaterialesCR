@@ -3,6 +3,7 @@ import { TbTrash } from 'react-icons/tb';
 import { db } from '../../firebaseConfig';
 import { onValue, ref } from 'firebase/database';
 import { Link } from 'react-router-dom';
+import GraficosGuias from './GraficosGuias';
 
 const Dashboard = ({
   verTodas = false,
@@ -33,8 +34,7 @@ const Dashboard = ({
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* Historial de Facturas (arriba izquierda) */}
+      {/* <div className="grid grid-cols-1 xl:grid-cols-1 gap-6">
         <Link to={'/facturacion/todas'}>
         <div className="bg-gray-50 shadow-md rounded-lg p-6 col-span-1 cursor-pointer hover:bg-gray-100">
           <h3 className="text-lg font-bold mb-4 text-primary">
@@ -80,15 +80,11 @@ const Dashboard = ({
         </div>
         </Link>
 
-        {/* Otros bloques del Dashboard */}
-        <div className="bg-white p-6 rounded-lg shadow-md col-span-1">
-          <h3 className="text-lg font-bold mb-4 text-gray-700">Gráfico 1</h3>
-        </div>
 
+      </div> */}
         <div className="bg-white p-6 rounded-lg shadow-md col-span-1">
-          <h3 className="text-lg font-bold mb-4 text-gray-700">Gráfico 2</h3>
+          <h3><GraficosGuias/></h3>
         </div>
-      </div>
     </div>
   );
 };

@@ -13,7 +13,7 @@ const handleLogin = async (e) => {
   e.preventDefault();
   try {
     await signInWithEmailAndPassword(auth, email, password);
-    navigate('/dashboard');
+    navigate('/facturacion');
   } catch (error) {
   if (error.code === 'auth/too-many-requests') {
     toast.error('Demasiados intentos fallidos. Inténtalo más tarde o restablece tu contraseña.');

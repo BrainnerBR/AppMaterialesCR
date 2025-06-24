@@ -2,17 +2,11 @@ import React, { useRef, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { ref, push, onValue, set, get, remove } from "firebase/database";
 import { db } from "../../firebaseConfig";
-import { Link, useNavigate } from "react-router-dom";
 import FacturacionNavbar from "./FacturacionNavbar";
-import { TbTrash } from "react-icons/tb";
 import UltimasFacturas from "./UltimasFacturas";
 
 const Facturacion = () => {
   const [cliente, setCliente] = useState("");
-  const [tipoBloque, setTipoBloque] = useState("");
-  const [cantidadBloques, setCantidadBloques] = useState("");
-  const [tipoAdoquin, setTipoAdoquin] = useState("");
-  const [cantidadAdoquines, setCantidadAdoquines] = useState("");
   const [recibidoPor, setRecibidoPor] = useState("");
   const [productos, setProductos] = useState([]);
   const [productoTipo, setProductoTipo] = useState("");
@@ -118,7 +112,7 @@ const siguienteNumero = numeroActual + 1;
               >
                 <option value="">Seleccionar</option>
                 {productoTipo === "Bloque" &&
-                  ["12x20x40", "15x20x40", "20x20x40"].map(
+                  ["12x20x40 A", "15x20x40 A", "20x20x40 A", "12x20x40 Especial", "15x20x40 Especial", "20x20x40 Especial"].map(
                     (bloque) => (
                       <option key={bloque} value={bloque}>
                         {bloque}
@@ -126,7 +120,7 @@ const siguienteNumero = numeroActual + 1;
                     )
                   )}
                 {productoTipo === "Adoquín" &&
-                  ["8x10x20", "6x10x20"].map((adoquin) => (
+                  ["8x10x20 A", "6x10x20 A","8x10x20 Especial", "6x10x20 Especial"].map((adoquin) => (
                     <option key={adoquin} value={adoquin}>
                       {adoquin}
                     </option>

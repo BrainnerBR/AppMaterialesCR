@@ -2,6 +2,7 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom'; 
 import { FaFileInvoice, FaProjectDiagram, FaBoxOpen, FaMapMarkerAlt, FaSignOutAlt } from 'react-icons/fa';
+import { BsGraphUpArrow } from 'react-icons/bs';
 
 
 const Sidebar = () => {
@@ -10,6 +11,7 @@ const Sidebar = () => {
 
   const navItems = [
     {path: '/facturacion', label: 'Guías de Entrega', icon: <FaFileInvoice className='w-5 h-5 text-text' />},
+    { path: '/dashboard', label: 'Dashboard', icon: <BsGraphUpArrow className="w-5 h-5 text-text" /> },
     { path: '/proyectos', label: 'Proyectos', icon: <FaProjectDiagram className="w-5 h-5 text-text" /> },
     { path: '/inventario', label: 'Inventario', icon: <FaBoxOpen className="w-5 h-5 text-text" /> },
     { path: '/visitas', label: 'Visitas', icon: <FaMapMarkerAlt className="w-5 h-5 text-text" /> },

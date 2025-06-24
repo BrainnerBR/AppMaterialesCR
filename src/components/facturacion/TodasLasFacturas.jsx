@@ -156,7 +156,7 @@ const TodasLasFacturas = () => {
                       <td className={`px-3 py-3 ${textClass}`}>
                         {(factura.productos || [])
                           .map((p) => `${p.tipo} - ${p.detalle}`)
-                          .join(", ")}
+                          .join(" |----| ")}
                       </td>
                       <td className={`px-3 py-3 text-center ${textClass}`}>
                         {calcularCantidadTotal(factura.productos)}

@@ -9,7 +9,7 @@ const FacturaImprimible = ({ factura }) => {
     printWindow.document.write(`
       <html>
         <head>
-          <title>Factura</title>
+          <title>Guia</title>
           <style>
             body {
               font-family: monospace;
@@ -54,13 +54,13 @@ const FacturaImprimible = ({ factura }) => {
           </style>
         </head>
         <body onload="window.print(); window.close();">
-          <img src="${Logo}" alt="Logo" class="logo" />
-          <div class="center bold">GUÍA POR ENTREGA DE MATERIALES</div>
+          <img src="${Logo}" alt="Logo" class="logo" style="margin-bottom: 5rem;" />
+          <div class="center bold" style="margin-bottom: 2rem;">GUÍA POR ENTREGA DE MATERIALES</div>
           <div class="center">Tel.: 2261-0241</div>
           <div class="center">No.: ${factura.numeroFactura || "N/A"}</div>
           <div class="line"></div>
 
-          <div class="row"><span>Fecha:</span><span>${factura.fecha}</span></div>
+          <div class="row"><span>FECHA:</span><span>${factura.fecha}</span></div>
           <div class="row"><span>CLIENTE:</span><span>${factura.cliente}</span></div>
 
           <div class="line"></div>
